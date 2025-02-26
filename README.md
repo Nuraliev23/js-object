@@ -80,3 +80,202 @@ Object.setPrototypeOf()
 Устанавливает прототип (т.е. внутреннее свойство [[Prototype]])
 # Экземпляры и прототип объекта Object
 Экземпляры и прототип объекта Object
+
+Object.keys() is a built-in JavaScript method that returns an array of a given object's own enumerable property names (keys). It only returns the keys of the object itself, not the ones it inherits from its prototype chain.
+
+Syntax:
+javascript
+Копировать
+Object.keys(obj)
+Parameters:
+obj: The object whose own enumerable property names you want to retrieve.
+Return Value:
+An array of strings representing the keys of the object's own properties.
+Example:
+javascript
+Копировать
+const person = {
+  name: 'Alice',
+  age: 30,
+  city: 'New York'
+};
+
+const keys = Object.keys(person);
+console.log(keys); // Output: ["name", "age", "city"]
+In this example, Object.keys(person) returns an array of keys: ["name", "age", "city"].
+
+Key Points:
+Only the object's own properties are returned (not properties inherited through the prototype chain).
+The order of the keys in the array is the same as the order in which they were defined (for non-integer keys).
+
+Object.values() is a built-in JavaScript method that returns an array of the values of a given object's own enumerable properties. It doesn't include properties from the object's prototype chain.
+
+Syntax:
+javascript
+Копировать
+Object.values(obj)
+Parameters:
+obj: The object whose own enumerable property values you want to retrieve.
+Return Value:
+An array containing the values of the object's own properties.
+Example:
+javascript
+Копировать
+const person = {
+  name: 'Alice',
+  age: 30,
+  city: 'New York'
+};
+
+const values = Object.values(person);
+console.log(values); // Output: ["Alice", 30, "New York"]
+In this example, Object.values(person) returns an array of the values: ["Alice", 30, "New York"].
+
+Key Points:
+Similar to Object.keys(), but instead of returning the keys, it returns the values associated with those keys.
+The order of the values in the array is the same as the order of the keys in the object (for non-integer keys).
+It only returns the values of the object's own properties, not inherited properties.
+
+
+
+Object.entries() is a built-in JavaScript method that returns an array of a given object's own enumerable property [key, value] pairs. Each element of the array is itself an array with two elements: the first being the key and the second being the value.
+
+Syntax:
+javascript
+Копировать
+Object.entries(obj)
+Parameters:
+obj: The object whose own enumerable property [key, value] pairs you want to retrieve.
+Return Value:
+An array of arrays, where each inner array contains two elements: the key and the value of each property.
+Example:
+javascript
+Копировать
+const person = {
+  name: 'Alice',
+  age: 30,
+  city: 'New York'
+};
+
+const entries = Object.entries(person);
+console.log(entries); 
+// Output: [["name", "Alice"], ["age", 30], ["city", "New York"]]
+In this example, Object.entries(person) returns an array of key-value pairs:
+
+css
+Копировать
+[["name", "Alice"], ["age", 30], ["city", "New York"]]
+Key Points:
+Object.entries() gives you both the keys and the corresponding values of the object's own properties.
+The order of the key-value pairs in the array is the same as the order in which the properties were defined (for non-integer keys).
+It doesn't include properties from the object's prototype chain, only the object's own enumerable properties.
+Common Use Case:
+You can use Object.entries() in loops like for...of to iterate over both keys and values:
+
+javascript
+Копировать
+for (const [key, value] of Object.entries(person)) {
+  console.log(`${key}: ${value}`);
+}
+// Output:
+// name: Alice
+// age: 30
+// city: New York
+
+In JavaScript, the this keyword refers to the context in which a function is called. It is a special variable that provides a reference to the object in which the current code is executing. The value of this depends on how a function is called, and it behaves differently in different contexts.
+
+Key Points:
+this is determined at runtime, not at the time of function definition.
+The value of this can refer to different objects, depending on the execution context.
+It is often used inside methods to refer to the object the method is a part of.
+Common Cases for this:
+In a Method: When a function is used as a method of an object, this refers to the object the method is called on.
+
+javascript
+Копировать
+const person = {
+  name: 'Alice',
+  greet: function() {
+    console.log(`Hello, my name is ${this.name}`);
+  }
+};
+
+person.greet(); // Output: Hello, my name is Alice
+Here, this.name refers to the name property of the person object.
+
+In a Function (Global context): In non-strict mode, if you use this inside a regular function, it refers to the global object (window in browsers or global in Node.js).
+
+javascript
+Копировать
+function show() {
+  console.log(this); // In a browser, this refers to the window object
+}
+
+show();
+In strict mode ('use strict';), this will be undefined in a regular function:
+
+javascript
+Копировать
+'use strict';
+function show() {
+  console.log(this); // Output: undefined
+}
+
+show();
+In an Arrow Function: Arrow functions do not have their own this value. Instead, they inherit this from the surrounding lexical context (the place where the function was created).
+
+javascript
+Копировать
+const person = {
+  name: 'Alice',
+  greet: () => {
+    console.log(this.name); // 'this' is inherited from the outer context, not the person object
+  }
+};
+
+person.greet(); // Output: undefined (if in the global context)
+In this example, the arrow function does not get this from the person object, but rather from the outer (global) context.
+
+In a Constructor Function: In a constructor function (i.e., when you use new), this refers to the newly created instance of the object.
+
+javascript
+Копировать
+function Person(name) {
+  this.name = name;
+}
+
+const alice = new Person('Alice');
+console.log(alice.name); // Output: Alice
+Here, this refers to the newly created alice object.
+
+Event Handlers: In event handlers, this refers to the element that fired the event.
+
+javascript
+Копировать
+const button = document.querySelector('button');
+button.addEventListener('click', function() {
+  console.log(this); // Output: the button element that was clicked
+});
+Explicit Binding (call, apply, and bind): You can explicitly set the value of this using call(), apply(), or bind().
+
+javascript
+Копировать
+function greet() {
+  console.log(`Hello, ${this.name}`);
+}
+
+const person = { name: 'Alice' };
+
+greet.call(person); // Output: Hello, Alice
+greet.apply(person); // Output: Hello, Alice
+
+const boundGreet = greet.bind(person);
+boundGreet(); // Output: Hello, Alice
+Summary:
+this refers to the context in which the function is executed.
+In methods, this refers to the object the method is a part of.
+In a regular function (non-strict mode), this refers to the global object.
+In arrow functions, this is inherited from the surrounding context.
+In constructors and event handlers, this has specific behaviors that depend on how the function is called.
+
+
